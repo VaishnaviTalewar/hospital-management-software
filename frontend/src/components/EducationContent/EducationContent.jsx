@@ -1,11 +1,41 @@
-import React from "react";
-import { Button, Form, InputGroup } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Form, InputGroup, Modal } from "react-bootstrap";
 import { FiEye, FiEdit, FiTrash2 } from "react-icons/fi";
 import diet from "../../../public/diet.jpeg";
 import hygine from "../../../public/hygine.jpg";
 import yoga from "../../../public/yoga.jpeg";
 
 const EducationContent = () => {
+  const [showModal, setShowModal] = useState(false);
+
+  // Form state
+  const [newContent, setNewContent] = useState({
+    title: "",
+    category: "",
+    author: "",
+    date: "",
+    img: null,
+  });
+
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === "img") {
+      setNewContent({ ...newContent, img: files[0] });
+    } else {
+      setNewContent({ ...newContent, [name]: value });
+    }
+  };
+
+  const handleSave = () => {
+    console.log("New Content Added:", newContent);
+    // Reset form
+    setNewContent({ title: "", category: "", author: "", date: "", img: null });
+    handleCloseModal();
+  };
+
   return (
     <div
       style={{
@@ -17,12 +47,12 @@ const EducationContent = () => {
         display: "flex",
         flexDirection: "column",
         height: "80vh",
-        margin:"20px auto"
+        margin: "20px auto",
       }}
     >
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
-        <h4 style={{ borderBottom: "2px solid #0d6efd", paddingBottom: "8px", marginTop: "10px", fontWeight:"bold" }}>
+        <h4 style={{ borderBottom: "2px solid #0d6efd", paddingBottom: "8px", marginTop: "10px", fontWeight: "bold" }}>
           Education Content
         </h4>
         <Button
@@ -32,8 +62,9 @@ const EducationContent = () => {
             fontSize: "13px",
             padding: "6px 12px",
             border: "none",
-            width:"120px"
+            width: "120px",
           }}
+          onClick={handleOpenModal}
         >
           + Add Content
         </Button>
@@ -53,7 +84,7 @@ const EducationContent = () => {
         </Form.Select>
       </div>
 
-      {/* Cards */}
+      {/* Cards manually added */}
       <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: "15px" }}>
         <EducationCard
           img={diet}
@@ -77,12 +108,72 @@ const EducationContent = () => {
           date="07/12/2025"
         />
       </div>
+
+      {/* Add Content Modal */}
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Content</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-2">
+              <Form.Label>Title</Form.Label>
+              <Form.Control
+                type="text"
+                name="title"
+                value={newContent.title}
+                onChange={handleChange}
+                placeholder="Enter title"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-2">
+              <Form.Label>Category</Form.Label>
+              <Form.Select name="category" value={newContent.category} onChange={handleChange}>
+                <option value="">Select Category</option>
+                <option value="Nutrition">Nutrition</option>
+                <option value="Healthy Lifestyle">Healthy Lifestyle</option>
+                <option value="Healthy Habits">Healthy Habits</option>
+              </Form.Select>
+            </Form.Group>
+
+            <Form.Group className="mb-2">
+              <Form.Label>Author</Form.Label>
+              <Form.Control
+                type="text"
+                name="author"
+                value={newContent.author}
+                onChange={handleChange}
+                placeholder="Enter author name"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-2">
+              <Form.Label>Date</Form.Label>
+              <Form.Control
+                type="date"
+                name="date"
+                value={newContent.date}
+                onChange={handleChange}
+              />
+            </Form.Group>
+
+    
+            <Button
+              style={{ background: "#0d6efd", border: "none", marginTop: "10px" }}
+              onClick={handleSave}
+            >
+              Save Content
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
 
 const EducationCard = ({ img, title, category, author, date }) => {
-  const [hover, setHover] = React.useState(false);
+  const [hover, setHover] = useState(false);
 
   return (
     <div
@@ -102,13 +193,19 @@ const EducationCard = ({ img, title, category, author, date }) => {
       onMouseLeave={() => setHover(false)}
     >
       <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-        <img src={img} alt={title} style={{ width: "100px", height: "100px", borderRadius: "10px", objectFit: "cover" }} />
+        <img
+          src={img}
+          alt={title}
+          style={{ width: "100px", height: "100px", borderRadius: "10px", objectFit: "cover" }}
+        />
         <div>
           <h6 style={{ margin: "0 0 6px 0" }}>{title}</h6>
-          <small style={{ color: "#555" }}>{author} | {category} | {date}</small>
+          <small style={{ color: "#555" }}>
+            {author} | {category} | {date}
+          </small>
         </div>
       </div>
-      {/* Icons vertically */}
+
       <div style={{ display: "flex", gap: "10px", fontSize: "18px", color: "#0d6efd" }}>
         <FiEye style={{ cursor: "pointer" }} />
         <FiEdit style={{ cursor: "pointer", color: "#198754" }} />
