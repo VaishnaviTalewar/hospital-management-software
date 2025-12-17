@@ -344,8 +344,8 @@ const Patient = () => {
               className="mb-2"
               name="name"
               placeholder="Name"
-              onChange={handleChange}
-              {/*handlechange :- har input ke change pr call hoga */}
+              onChange={handleChange}  
+            
             />
             <Form.Label>Patient Age :</Form.Label>
             <Form.Control
