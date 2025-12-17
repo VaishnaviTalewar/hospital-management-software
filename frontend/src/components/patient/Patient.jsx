@@ -21,6 +21,7 @@ const Patient = () => {
 
   const handleChange = (e) => {
     setNewPatient({ ...newPatient, [e.target.name]: e.target.value });
+    {/*new patient purana data store krega taaki new add hone pr vo remove na ho jaye */}
   };
 
   const handleSave = () => {
@@ -326,8 +327,13 @@ const Patient = () => {
           Next
         </Button>{" "}
       </div>
+
+      {/*Form will get open when the user click on new patient */}
+      {/*Modal :- react component , used to create popup */}
+      {/*Onhide closed to close modal */}
       {/* Modal */}
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      <Modal show={showModal} onHide={() => setShowModal(false)}> {/*jb user close btn click krega toh bnd ho jayega isliye false rkha h */}
+        {/*showModal state variable h joh true rhega toh open hoga and false rhega toh bnd rhega */}
         <Modal.Header closeButton>
           <Modal.Title>Add New Patient</Modal.Title>
         </Modal.Header>
@@ -339,6 +345,7 @@ const Patient = () => {
               name="name"
               placeholder="Name"
               onChange={handleChange}
+              {/*handlechange :- har input ke change pr call hoga */}
             />
             <Form.Label>Patient Age :</Form.Label>
             <Form.Control
@@ -369,7 +376,7 @@ const Patient = () => {
               onChange={handleChange}
             />
             <Button className="w-100" onClick={handleSave}>
-              Save
+              Save patient
             </Button>
           </Form>
         </Modal.Body>
@@ -379,3 +386,17 @@ const Patient = () => {
 };
 
 export default Patient;
+
+{/**Modal open
+
+User form fill karta hai
+
+handleChange state update karta hai
+
+Save click
+
+Patient list mein add
+
+Form reset
+
+Modal close */}
