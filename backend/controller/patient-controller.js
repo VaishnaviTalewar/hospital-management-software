@@ -1,4 +1,4 @@
-import Patients from "../models/patient-models.js";
+import Patients from "../models/patient-model.js";
 
 // GET all patients
 const getAllPatient = async (req, res) => {

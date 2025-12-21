@@ -1,24 +1,32 @@
-import express from "express"
-import mongoose from "mongoose";
-import dotenv from "dotenv"
+import express from "express";
+import dotenv from "dotenv";
 import ConnectDb from "./utility/connectDB.js";
+
+import PatientRouter from "./routes/patient-route.js";
+import AppointmentRouter from "./routes/appointment-route.js";
+
 dotenv.config();
-let PORT = process.env.PORT || 8000;
-let DATABASE_URL = process.env.DATABASE_URL;
-let server = express();
+const app = express();
 
-//connecting server to db
-ConnectDb(DATABASE_URL);
+// middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-server.get("/", (req, res) => {
-    res.send("Welcome to Backend of Hospital Management Software ")
-})
+const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, () => {
-    console.log(`server is running at 'http://localhost:${PORT}'`)
+console.log("ENV PORT:", process.env.PORT);
+
+// ✅ DB connect (correct)
+ConnectDb();
+
+app.get("/", (req, res) => {
+  res.send("Welcome to Hospital Management System");
 });
 
-//MVC :
-//Model : database me data organize krta h
-//view : frontend ko represent krta h . joh display hota h 
-//controller : req res ko control krta h.
+// routes
+app.use("/api", PatientRouter);
+app.use("/api", AppointmentRouter);
+
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
