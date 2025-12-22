@@ -22,9 +22,11 @@ const getAllAppointments = async (req, res) => {
 // ADD appointment
 const AddAppointment = async (req, res) => {
   try {
-    const { time, date, patientName, age, doctor, feeStatus } = req.body;
+    const { time, date, patient, age, doctor, feeStatus } = req.body;
+    // console.log(time, date, patient, age, doctor, feeStatus );
+    
 
-    if (!time || !date || !patientName || !doctor) {
+    if (!time || !date || !patient || !doctor) {
       return res.status(400).json({
         success: false,
         message: "Time, date, patient name and doctor are required",
@@ -34,13 +36,14 @@ const AddAppointment = async (req, res) => {
     const appointment = await Appointments.create({
       time,
       date,
-      patientName,
+      patient,
       age,
       doctor,
       feeStatus,
+      status: feeStatus === "Paid" ? "Complete" : "New",
     });
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "Appointment added successfully",
       data: appointment,

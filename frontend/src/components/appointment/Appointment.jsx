@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Table, Button, Form, InputGroup, Modal } from "react-bootstrap";
 import { MdClose } from "react-icons/md"; // Close icon
+import axios from "axios";
 
 const Appointment = () => {
   const [activeTab, setActiveTab] = useState("new");
@@ -18,29 +19,34 @@ const Appointment = () => {
     feeStatus: "Unpaid",
   });
 
+
+
+  
+
   // State to store new appointments
   const [appointments, setAppointments] = useState({
-    new: [
-      { time: "9:30 AM", date: "05/12/2025", patient: "Ashna Anjum", age: 22, doctor: "Dr Vaishu" },
-      { time: "10:00 AM", date: "05/12/2025", patient: "Riya Sharma", age: 26, doctor: "Dr Vaishu" },
-      { time: "11:15 AM", date: "05/12/2025", patient: "Karan Patel", age: 29, doctor: "Dr Vaishu" },
-      { time: "12:30 AM", date: "05/12/2025", patient: "Aman Hiranwar", age: 29, doctor: "Dr Vaishu" },
-      { time: "2:00 AM", date: "05/12/2025", patient: "Vyankat Talewar", age: 29, doctor: "Dr Vaishu" },
-      { time: "2:45 AM", date: "05/12/2025", patient: "Vaishu Talewar", age: 29, doctor: "Dr Vaishu" },
-      { time: "3:30 AM", date: "05/12/2025", patient: "Laxmi Talewar", age: 29, doctor: "Dr Vaishu" },
-      { time: "4:10 AM", date: "05/12/2025", patient: "Darshan Talewar", age: 29, doctor: "Dr Vaishu" },
-    ],
-    complete: [
-      { time: "12:00 PM", date: "06/12/2025", patient: "Ashna Anjum", age: 32, doctor: "Dr Vaishu", feeStatus: "Unpaid" },
-      { time: "1:30 PM", date: "06/12/2025", patient: "Riya Sharma", age: 24, doctor: "Dr Vaishu", feeStatus: "Paid" },
-      { time: "2:45 PM", date: "06/12/2025", patient: "Karan Patel", age: 28, doctor: "Dr Vaishu", feeStatus: "Unpaid" },
-      { time: "3:00 PM", date: "06/12/2025", patient: "Aman Hiranwar", age: 28, doctor: "Dr Vaishu", feeStatus: "Paid" },
-      { time: "3:45 PM", date: "06/12/2025", patient: "Vyankat Talewar", age: 28, doctor: "Dr Vaishu", feeStatus: "Unpaid" },
-      { time: "4:30 PM", date: "06/12/2025", patient: "Vaishu Talewar", age: 28, doctor: "Dr Vaishu", feeStatus: "Paid" },
-      { time: "4:30 PM", date: "06/12/2025", patient: "Laxmi Talewar", age: 28, doctor: "Dr Vaishu", feeStatus: "Paid" },
-      { time: "4:30 PM", date: "06/12/2025", patient: "Darshan Talewar", age: 28, doctor: "Dr Vaishu", feeStatus: "Paid" },
-    ],
+    new: [],
+    complete: [],
   });
+
+  useEffect(() => {
+  axios.get(`${import.meta.env.VITE_LOCALHOST_SERVER_URL}/api/appointments`).then((response) => {
+     if(response.data.success){
+      const allAppointments = response.data.data;
+
+
+      const newAppointments = allAppointments.filter(app => app.status === "New");
+      const completeAppointments = allAppointments.filter(app => app.status === "Complete");
+
+
+      setAppointments({
+        new: newAppointments,
+        complete: completeAppointments,
+      });
+     }
+      
+    });
+  }, [])
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -50,10 +56,15 @@ const Appointment = () => {
   };
 
   const handleSave = () => {
-    // Add new appointment to the "new" tab
-    setAppointments({
-      ...appointments,
-      new: [...appointments.new, newAppointment],
+
+    axios.post(`${import.meta.env.VITE_LOCALHOST_SERVER_URL}/api/add-appointment`, newAppointment).then((response) => {
+      const newAppointmentData = response.data.data;
+      
+      setAppointments({
+        ...appointments,
+        new: [...appointments.new, newAppointmentData],
+      });
+      
     });
 
     setNewAppointment({ time: "", date: "", patient: "", age: "", doctor: "", feeStatus: "Unpaid" });
