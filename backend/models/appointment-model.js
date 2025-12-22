@@ -1,33 +1,38 @@
 import mongoose from "mongoose";
 
-let AppointmentSchema = new mongoose.Schema({
-  time: {
-    type: String,
-    required: true,
+const AppointmentSchema = new mongoose.Schema(
+  {
+    time: {
+      type: String,
+      required: true,
+    },
+    date: {
+      type: String,
+      required: true,
+    },
+    patient: {
+      type: String,
+      required: true,
+    },
+    age: {
+      type: Number,
+      required: true,
+    },
+    doctor: {
+      type: String,
+      required: true,
+    },
+    feeStatus: {
+      type: String,
+      enum: ["Paid", "Unpaid"],
+      default: "Unpaid",
+    },
+    status: {
+      type: String,
+      default: "New", // New / Complete
+    },
   },
-  date: {
-    type: String,
-    required: true,
-  },
-  patientName: {
-    type: String,
-    required: true,
-  },
-  age: {
-    type: Number,
-    required: true,
-  },
-  doctor: {
-    type: String,
-    required: true,
-  },
-  feeStatus: {
-    type: String,
-    enum: ["Paid", "Unpaid"],
-    default: "Unpaid",
-  },
-});
+  { timestamps: true }
+);
 
-let Appointments = mongoose.model("appointments", AppointmentSchema);
-
-export default Appointments;
+export default mongoose.model("appointments", AppointmentSchema);
