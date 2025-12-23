@@ -30,13 +30,13 @@ const Login = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Form ka default submit rok dega
+    e.preventDefault(); //pause default behavior 
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
       // Validation pass hone par dashboard redirect
       navigate("/dashboard");
     } else {
-      setErrors(validationErrors); // Error messages show karne ke liye
+      setErrors(validationErrors); // used to shqw error
     }
   };
 

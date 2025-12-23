@@ -6,7 +6,7 @@ import {
   DeleteAppointment,
 } from "../controller/appointment-controller.js";
 
-let router = express.Router();
+const router = express.Router();
 
 router.get("/appointments", getAllAppointments);
 router.post("/add-appointment", AddAppointment);
