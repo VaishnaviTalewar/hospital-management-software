@@ -2,41 +2,45 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
+  // email state
   const [email, setEmail] = useState("");
+
+  // password state
   const [password, setPassword] = useState("");
+
+  // errors state
   const [errors, setErrors] = useState({});
+
+  // navigation
   const navigate = useNavigate();
 
+  // form validation
   const validate = () => {
-    const newErrors = {};
+    let errors = {};  //to store error messages
 
-    // Email validation
-    if (!email) {
-      newErrors.email = "Email is required";
-    } else {
-      // Simple regex for email validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        newErrors.email = "Invalid email address";
-      }
+    if (email === "") {
+      errors.email = "Email is required";
+    } else if (!email.includes("@")) {
+      errors.email = "Invalid email";
     }
 
-    // Password validation
-    if (!password) {
-      newErrors.password = "Password is required";
+    if (password === "") {
+      errors.password = "Password is required";
     }
 
-    return newErrors;
+    return errors;
   };
 
+  // form submit
   const handleSubmit = (e) => {
-    e.preventDefault(); //pause default behavior 
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length === 0) {
-      // Validation pass hone par dashboard redirect
+    e.preventDefault();
+
+    const errors = validate();
+
+    if (Object.keys(errors).length === 0) {
       navigate("/dashboard");
     } else {
-      setErrors(validationErrors); // used to shqw error
+      setErrors(errors);
     }
   };
 
@@ -99,7 +103,11 @@ const Login = () => {
 
           <div className="d-flex justify-content-between align-items-center mb-3">
             <div className="form-check">
-              <input type="checkbox" className="form-check-input" id="remember" />
+              <input
+                type="checkbox"
+                className="form-check-input"
+                id="remember"
+              />
               <label className="form-check-label" htmlFor="remember">
                 Remember me
               </label>
