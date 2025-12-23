@@ -63,8 +63,8 @@ const Login = () => {
           maxWidth: "400px",
         }}
       >
-        <h1 className="text-center mb-3">Login</h1>
-        <h4 className="text-center mb-4">Login to your Account</h4>
+        <h1 className="text-center mb-3">Sign Up</h1>
+        <h4 className="text-center mb-4">Sign up to your account</h4>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
@@ -101,25 +101,10 @@ const Login = () => {
             )}
           </div>
 
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <div className="form-check">
-              <input
-                type="checkbox"
-                className="form-check-input"
-                id="remember"
-              />
-              <label className="form-check-label" htmlFor="remember">
-                Remember me
-              </label>
-            </div>
-
-            <a href="#" className="text-decoration-none">
-              Reset Password?
-            </a>
-          </div>
+          
 
           <button type="submit" className="btn btn-primary w-100">
-            Sign In
+            Sign up
           </button>
         </form>
       </div>
