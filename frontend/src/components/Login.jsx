@@ -1,27 +1,26 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import api from "../utils/api";
+import { setTokenCookie } from "../utils/auth";
 
 const Login = () => {
-  // email state
+  // email store karne ke liye
   const [email, setEmail] = useState("");
+ 
 
-  // password state
+  // password store karne ke liye
   const [password, setPassword] = useState("");
 
-  // errors state
+  // error messages ke liye
   const [errors, setErrors] = useState({});
 
-  // navigation
   const navigate = useNavigate();
 
-  // form validation
+  // form check karne ka function
   const validate = () => {
-    let errors = {};  //to store error messages
-
+    let errors = {};
     if (email === "") {
       errors.email = "Email is required";
-    } else if (!email.includes("@")) {
-      errors.email = "Invalid email";
     }
 
     if (password === "") {
@@ -31,15 +30,27 @@ const Login = () => {
     return errors;
   };
 
-  // form submit
+  // login button click
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const errors = validate();
 
     if (Object.keys(errors).length === 0) {
-      navigate("/dashboard");
+      // call backend login
+      api
+        .post('/login', { email, password })
+        .then((res) => {
+          const token = res.data.token;
+          if (token) setTokenCookie(token);
+          navigate('/dashboard');
+        })
+        .catch((err) => {
+          const msg = err?.response?.data?.error || 'Login failed';
+          setErrors({ form: msg });
+        });
     } else {
+      // error haitoh show hoga
       setErrors(errors);
     }
   };
@@ -56,26 +67,23 @@ const Login = () => {
       }}
     >
       <div
-        className="p-4 rounded shadow"
-        style={{
-          backgroundColor: "white",
-          width: "100%",
-          maxWidth: "400px",
-        }}
+        className="p-4 shadow rounded"
+        style={{ width: "100%", maxWidth: "400px", background: "#fff" }}
       >
-        <h1 className="text-center mb-3">Sign Up</h1>
-        <h4 className="text-center mb-4">Sign up to your account</h4>
+        <h2 className="text-center mb-3">Login</h2>
+        <p className="text-center text-muted">Login to your account</p>
 
         <form onSubmit={handleSubmit}>
+          
+      
+
+          {/* Email fiwld */}
           <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Email Address:
-            </label>
+            <label>Email</label>
             <input
               type="email"
               className={`form-control ${errors.email ? "is-invalid" : ""}`}
-              id="email"
-              placeholder="Enter your email"
+              placeholder="Enter email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -84,14 +92,12 @@ const Login = () => {
             )}
           </div>
 
+          {/* Password field*/}
           <div className="mb-3">
-            <label htmlFor="password" className="form-label">
-              Password:
-            </label>
+            <label>Password</label>
             <input
               type="password"
               className={`form-control ${errors.password ? "is-invalid" : ""}`}
-              id="password"
               placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -101,11 +107,16 @@ const Login = () => {
             )}
           </div>
 
-          
-
           <button type="submit" className="btn btn-primary w-100">
-            Sign up
+            Login
           </button>
+          {errors.form && (
+            <div className="text-danger text-center mt-2">{errors.form}</div>
+          )}
+
+          <p className="text-center mt-3">
+            New user? <Link to="/Signup">Sign up</Link>
+          </p>
         </form>
       </div>
     </div>

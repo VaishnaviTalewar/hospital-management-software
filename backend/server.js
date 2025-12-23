@@ -4,6 +4,7 @@ import ConnectDb from "./utility/connectDB.js";
 import cors from "cors";
 import PatientRouter from "./routes/patient-route.js";
 import AppointmentRouter from "./routes/appointment-route.js";
+import LoginSignupRouter from "./routes/login-route.js";
 
 dotenv.config();
 const app = express();
@@ -35,6 +36,7 @@ app.get("/", (req, res) => {
 // routes
 app.use("/api", PatientRouter);
 app.use("/api", AppointmentRouter);
+app.use("/api", LoginSignupRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);

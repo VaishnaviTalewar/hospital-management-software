@@ -1,6 +1,6 @@
 // SideNav.jsx
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { IoIosSpeedometer } from "react-icons/io";
 import { IoDocumentText, IoPeople, IoSchoolSharp, IoSettings, IoLogOut } from "react-icons/io5";
 import { FaUserDoctor } from "react-icons/fa6";
@@ -8,6 +8,20 @@ import { BiSolidMessageSquareDots } from "react-icons/bi";
 import { GiMedicinePills } from "react-icons/gi";
 
 const SideNav = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    try {
+      // clear token cookie
+      import('../../utils/auth').then(({ removeTokenCookie }) => {
+        removeTokenCookie();
+        navigate('/Login');
+      });
+    } catch (err) {
+      navigate('/Login');
+    }
+  };
+
   return (
     <nav
       className="d-flex flex-column vh-100 bg-light text-dark p-3"
@@ -124,10 +138,10 @@ const SideNav = () => {
       </ul>
 
       <div className="mt-auto">
-        <NavLink to="/" className="btn btn-outline-danger w-100">
+        <button type="button" className="btn btn-outline-danger w-100" onClick={handleLogout}>
           <IoLogOut className="me-2" />
           Logout
-        </NavLink>
+        </button>
       </div>
     </nav>
   );

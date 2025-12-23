@@ -3,7 +3,6 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage";
 import PatientPage from "./pages/PatientPage";
-import Login from "./components/Login";
 import Layout from "./components/common/Layout";
 import AppointmentsPage from "./pages/AppointmentsPage";
 import DoctorPage from "./pages/DoctorPage";
@@ -11,21 +10,29 @@ import MessagesPage from "./components/Message/Message";
 import MedicinePage from "./components/MedicineInventory/MedicineInventory";
 import EducationContent from "./components/EducationContent/EducationContent";
 import SettingPage from "./components/settings/Settings";
+import Login from "./components/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Signup from "./components/signup";
 
 const App = () => {
   return (
     <div>
       <Routes>
-        {/* Login */}
-        <Route path="/" element={<Login />} />
+         {/*Sign up */}
+        <Route path="/signup" element={<Signup />} />
+
+         {/* Login */}
+        <Route path="/login" element={<Login />} />
 
         {/* Dashboard */}
         <Route
           path="/dashboard"
           element={
-            <Layout pageTitle="Dashboard">
-              <DashboardPage />
-            </Layout>
+            <ProtectedRoute>
+              <Layout pageTitle="Dashboard">
+                <DashboardPage />
+              </Layout>
+            </ProtectedRoute>
           }
         />
 
@@ -33,9 +40,11 @@ const App = () => {
         <Route
           path="/patient"
           element={
-            <Layout pageTitle="Patient Details">
-              <PatientPage />
-            </Layout>
+            <ProtectedRoute>
+              <Layout pageTitle="Patient Details">
+                <PatientPage />
+              </Layout>
+            </ProtectedRoute>
           }
         />
 
@@ -43,19 +52,23 @@ const App = () => {
         <Route
           path="/Appointments"
           element={
-            <Layout pageTitle="Appointment">
-              <AppointmentsPage />
-            </Layout>
+            <ProtectedRoute>
+              <Layout pageTitle="Appointment">
+                <AppointmentsPage />
+              </Layout>
+            </ProtectedRoute>
           }
         />
 
         {/* Doctor Page */}
         <Route
-          path="/Doctor"
+          path="/doctor"
           element={
-            <Layout pageTitle="Doctor">
-              <DoctorPage />
-            </Layout>
+            <ProtectedRoute>
+              <Layout pageTitle="Doctor">
+                <DoctorPage />
+              </Layout>
+            </ProtectedRoute>
           }
         />
 
@@ -63,9 +76,11 @@ const App = () => {
         <Route
           path="/Messages"
           element={
-            <Layout pageTitle="Messages">
-              <MessagesPage />
-            </Layout>
+            <ProtectedRoute>
+              <Layout pageTitle="Messages">
+                <MessagesPage />
+              </Layout>
+            </ProtectedRoute>
           }
         />
 
@@ -73,9 +88,11 @@ const App = () => {
         <Route
           path="/Medicine-Inventory"
           element={
-            <Layout pageTitle="Medicine Inventory">
-              <MedicinePage />
-            </Layout>
+            <ProtectedRoute>
+              <Layout pageTitle="Medicine Inventory">
+                <MedicinePage />
+              </Layout>
+            </ProtectedRoute>
           }
         />
 
@@ -83,9 +100,11 @@ const App = () => {
         <Route
           path="/Education-content"
           element={
-            <Layout pageTitle="Education Content">
-              <EducationContent />
-            </Layout>
+            <ProtectedRoute>
+              <Layout pageTitle="Education Content">
+                <EducationContent />
+              </Layout>
+            </ProtectedRoute>
           }
         />
 
@@ -93,9 +112,11 @@ const App = () => {
         <Route
           path="/Settings"
           element={
-            <Layout pageTitle="Settings">
-              <SettingPage />
-            </Layout>
+            <ProtectedRoute>
+              <Layout pageTitle="Settings">
+                <SettingPage />
+              </Layout>
+            </ProtectedRoute>
           }
         />
       </Routes>
